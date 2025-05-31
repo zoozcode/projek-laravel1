@@ -11,6 +11,30 @@ class MebelController extends Controller
         return view('home');
     }
     function produk(){
-        return view('produk', ['produk'=>Produk::all()]);
+     $produk = Produk::latest();
+
+    if (request('search')) {
+        $produk->where(function($query) {
+            $search = request('search');
+            $query->where('nama', 'like', '%' . $search . '%')
+                  ->orWhere('harga', 'like', '%' . $search . '%');
+        });
+    }
+
+    // Ambil hasil query dengan get()
+    return view('produk', ['produk' => $produk->paginate(10)]);
+    }
+
+    function pesanbayar(){
+        return view('pesanbayar');
+    }
+    function contact(){
+        return view('contact');
+    }
+    function faq(){
+        return view('faq');
+    }
+    function profile(){
+        return view('profile');
     }
 }
